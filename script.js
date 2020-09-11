@@ -9,6 +9,7 @@ function writePassword(pass) {
 
 }
 
+/**************************** Array creation functions ****************************/
 // Make an array of lowercase letters
 function makeLowerArray(){
   var letterArray = [];
@@ -61,6 +62,7 @@ function makeSpecialArray(){
   return(specialArray);
 }
 
+/**************************** grab random character functions ****************************/
 // Get a random lowercase letter
 function getLower(){
   var letter = makeLowerArray();
@@ -90,6 +92,7 @@ function getSpecial(){
   return(special[randChar]);
 }
 
+/**************************** Password creation functions ****************************/
 // Get the type of character to be added
 function collectType(low, high, num, spec){
   var correctChoice = false;
@@ -138,6 +141,57 @@ function buildPass(length, lower, upper, number, special){
   return(pass);
 }
 
+/**************************** Array check function ****************************/
+// Check if the string contains all the requested elements
+function passCheck(pass, lower, upper, number, special){
+  var checksOut = false;
+  var hasLower = false;
+  var hasUpper = false;
+  var hasNumber = false;
+  var hasSpecial = false;
+
+  for(var i = 0; i < pass.length; i++){
+    
+    /* Uncomment this if you want to assume the password doesn't contain character types that you wanted omitted
+    if((lower === hasLower) && (upper === hasUpper) && (number === hasNumber) && (special === hasSpecial)){
+      break;
+    }
+    */
+
+    for(var j = 0; j < 26; j++){
+      if(pass[i] === makeLowerArray()[j]){
+        hasLower = true;
+        break;
+      }
+
+    }
+    for(var k = 0; k < 26; k++){
+      if(pass[i] === makeUpperArray()[k]){
+        hasUpper = true;
+        break;
+      }
+    }
+    for(var j = 0; j < 10; j++){
+      if(pass[i] === makeNumArray()[j]){
+        hasNumber = true;
+        break;
+      }
+    }
+    for(var j = 0; j < 33; j++){
+      if(pass[i] === makeSpecialArray()[j]){
+        hasSpecial = true;
+        break;
+      }
+    }
+  }
+
+  if((lower === hasLower) && (upper === hasUpper) && (number === hasNumber) && (special === hasSpecial)){
+    checksOut = true;
+  }
+
+  return(checksOut);
+}
+
 // Main function that gets the user's requirements when button is clicked
 function clickGen(){
 
@@ -153,7 +207,13 @@ function clickGen(){
     var choiceSpecial = confirm("Would you like to include special characters?");
 
     if(choiceLower || choiceUpper || choiceNum || choiceSpecial){
-      var password = buildPass(passLength, choiceLower, choiceUpper, choiceNum, choiceSpecial);
+      var password = "";
+      do{
+        var typesMatch = false;
+        password = buildPass(passLength, choiceLower, choiceUpper, choiceNum, choiceSpecial);
+        typesMatch = passCheck(password, choiceLower, choiceUpper, choiceNum, choiceSpecial);
+      }while(typesMatch === false);
+
       writePassword(password);
     }
     // If they didn't select at least 1 type of character to add
