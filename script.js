@@ -9,78 +9,88 @@ function writePassword(pass) {
 
 }
 
+// Make an array of lowercase letters
 function makeLowerArray(){
   var letterArray = [];
   for(var i = 0; i < 26; i++){
+    // lowercase letters have an ascii index of 97 - 122
     letterArray[i] = String.fromCharCode(97 + i);
   }
   return(letterArray);
 }
 
+// Make an array of uppercase letters
 function makeUpperArray(){
   var letterArray = [];
   for(var i = 0; i < 26; i++){
+    // uppercase letters have an ascii index of 65 - 90
     letterArray[i] = String.fromCharCode(65 + i);
   }
   return(letterArray);
 }
 
-
+// Make an array of numbers (as strings to easier add to the password)
 function makeNumArray(){
   var numArray = [];
   for(var i = 0; i < 10; i++){
+    // numbers have an ascii index of 48 - 57
     numArray[i] = String.fromCharCode(48 + i);
   }
   return(numArray);
 }
 
-
+// Make an array of special characters
 function makeSpecialArray(){
   var specialArray = [];
   for(var i = 0; i < 15; i++){
+    // first set of special characters have an ascii index of 33 - 47
     specialArray[i] = String.fromCharCode(33 + i);
   }
   for(var i = 15; i < 22; i++){
+    // second set of special characters have an ascii index of 58 - 64
     specialArray[i] = String.fromCharCode(58 + (i-15));
   }
   for(var i = 22; i < 29; i++){
+    // third set of special characters have an ascii index of 91 - 96
     specialArray[i] = String.fromCharCode(91 + (i-23));
   }
   for(var i = 29; i < 33; i++){
+    // fourth set of special characters have an ascii index of 123 - 126
     specialArray[i] = String.fromCharCode(123 + (i-29));
   }
   return(specialArray);
 }
 
-
+// Get a random lowercase letter
 function getLower(){
   var letter = makeLowerArray();
-  //console.log(letter);
   var randLet = Math.floor(Math.random()*letter.length);
   return(letter[randLet]);
 }
 
+// Get a random uppercase letter
 function getUpper(){
   var letter = makeUpperArray();
-  //console.log(letter);
   var randLet = Math.floor(Math.random()*letter.length);
   return(letter[randLet]);
 
 }
 
+// Get a random number
 function getNum(){
   var num = makeNumArray();
-  //console.log(num);
   var randNum = Math.floor(Math.random()*num.length);
   return(num[randNum]);
 }
 
+// Get a random special character
 function getSpecial(){
   var special = makeSpecialArray();
   var randChar = Math.floor(Math.random()*special.length);
   return(special[randChar]);
 }
 
+// Get the type of character to be added
 function collectType(low, high, num, spec){
   var correctChoice = false;
   while(!correctChoice){
@@ -101,6 +111,7 @@ function collectType(low, high, num, spec){
   return(randChoice);
 }
 
+// Get the character of the chosen type
 function collectChar(choice){
   var addChar;
   if(choice === 0){
@@ -118,6 +129,7 @@ function collectChar(choice){
   return(addChar);
 }
 
+// Build a password of the specified length and character types
 function buildPass(length, lower, upper, number, special){
   var pass = "";
   for(var i = 0; i < length; i++){
@@ -126,34 +138,31 @@ function buildPass(length, lower, upper, number, special){
   return(pass);
 }
 
+// Main function that gets the user's requirements when button is clicked
 function clickGen(){
 
   var passLength = prompt("How long would you like the password? (between 8 and 128 characters)");
-  //console.log(`pass length : ${passLength}`);
 
   if(passLength > 7 && passLength < 129){
     var choiceLower = confirm("Would you like to include lowercase letters?");
-    //console.log(`lower case choice : ${choiceLower}`);
 
     var choiceUpper = confirm("Would you like to include capital letters?");
-    //console.log(`upper case choice : ${choiceUpper}`);
 
     var choiceNum = confirm("Would you like to include numbers?");
-    //console.log(`number choice : ${choiceNum}`);
 
     var choiceSpecial = confirm("Would you like to include special characters?");
-    //console.log(`special character choice : ${choiceSpecial}`);
 
     if(choiceLower || choiceUpper || choiceNum || choiceSpecial){
-      //console.log(`you selected at least one choice`);
       var password = buildPass(passLength, choiceLower, choiceUpper, choiceNum, choiceSpecial);
       writePassword(password);
     }
+    // If they didn't select at least 1 type of character to add
     else{
       alert("I'm sorry, but you need to select at least one option");
       writePassword("Your Secure Password would be here if you actually wanted one");
     }
   }
+  // If they didn't select a proper password size
   else{
     alert("I'm sorry, we need a number input from 8-128 only");
     writePassword("Your Secure Password would be here if you followed directions");
@@ -162,20 +171,3 @@ function clickGen(){
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", clickGen);
-
-
-/*
-on button click
-  -prompt for password length (8-128 characters)
-  -confirm for lowercase
-  -confirm for uppercase
-  -confirm for numbers
-  -confirm for special characters
-
-  -validate choices
-  -needs at least 1 choice
-
-  generate password based on choices
-
-  password is displayed, replace the card-body.textarea.placeholder
-*/
